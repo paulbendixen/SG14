@@ -1,7 +1,9 @@
+#pragma once
 #include <cstddef>
 #include <type_traits>
 #include <iterator>
 #include <cassert>
+#include <algorithm>
 
 namespace sg14
 {
@@ -69,6 +71,9 @@ namespace sg14
 		iterator end() noexcept;
 		const_iterator end() const noexcept;
 		const_iterator cend() const noexcept;
+
+		// Suggestion 
+		iterator normalize() noexcept; /* If std::rotate< type > is noexcept */
 
 		template<bool b = true, typename = std::enable_if_t<b && std::is_copy_assignable<T>::value>>
 		void push_back(const value_type& from_value) noexcept(std::is_nothrow_copy_assignable<T>::value);
@@ -281,6 +286,16 @@ void sg14::ring_span<T, Popper>::push_back(T&& value) noexcept(std::is_nothrow_m
 	m_data[back_idx()] = std::move(value);
 	increase_size();
 }
+
+template<typename T, class Popper>
+typename sg14::ring_span<T, Popper>::iterator sg14::ring_span<T, Popper>::normalize( void ) noexcept
+{
+	using std::rotate;
+	rotate( m_data, &m_data[ m_front_idx ], m_data + m_capacity );
+	m_front_idx = 0;
+	return iterator( m_front_idx, this);
+}
+
 
 template<typename T, class Popper>
 template<class... FromType>

@@ -111,3 +111,21 @@ void sg14_test::filter_test()
 	assert( std::inner_product( buffer.begin(), buffer.end(), filter_coefficients.begin(), 0.0 ) == 5.0 );
 	puts( "Filter example completed.\n" );
 }
+
+void sg14_test::normalisation_test()
+{
+	std::array< int, 3 > A;
+	sg14::ring_span< int > buffer( std::begin( A ), std::end( A ) );
+	buffer.push_back( 1 );
+	buffer.push_back( 2 );
+	buffer.push_back( 3 );
+	buffer.push_back( 5 );
+
+	assert( buffer.front() == 2 );
+	assert( A[0] == 5 );
+
+	buffer.normalize();
+
+	assert( A[0] == 2 ); 
+	puts( "Normalization example completed\n" );
+}

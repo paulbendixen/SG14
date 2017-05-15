@@ -10,6 +10,7 @@ namespace sg14_test
     void dynamic_ring_test();
 	void thread_communication_test();
 	void filter_test();
+	void normalisation_test();
 	void unstable_remove_test();
 	void uninitialized();
 }
